@@ -11,7 +11,12 @@ var List = React.createClass({
     },
 
     renderList(){
-        if (this.props.items && Object.keys(this.props.items).length === 0 ){
+
+        var itemsObj = this.props.items;
+        delete itemsObj['.key'];
+        delete itemsObj['.value'];
+
+        if (Object.keys(itemsObj).length === 0 ){
             return (
                 <h4>
                     Add a to-do to get started
@@ -19,16 +24,17 @@ var List = React.createClass({
             )
         } else {
             var children = [];
-            for (var key in this.props.items){
-                var item = this.props.items[key];
-                item.key = key;
-                children.push(
-                    <ListItem   item={item}
-                                key={key} >
-                    </ListItem>
-                )
+            for (var key in itemsObj){
+                   console.log('key is ', key);
+                   var item = itemsObj[key];
+                   console.log('item is ', item);
+                   item.key = key;
+                   children.push(
+                       <ListItem   item={item}
+                                   key={key} >
+                       </ListItem>
+                   )
             }
-            children = children.slice(0, children.length - 1);
             return children;
         }
     },

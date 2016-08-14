@@ -20,10 +20,15 @@ var ListItem = React.createClass({
             return null
         } else {
             return [
-                <span>
-                    <button className="btn btn-default">Save</button>
-                    <button className="btn btn-default">Undo</button>
-                </span>
+                <button className="btn btn-default"
+                        onClick={this.handleSaveClick}>
+                    Save
+                </button>,
+
+                <button className="btn btn-default"
+                        onClick={this.handleUndoClick}>
+                    Undo
+                </button>
             ]
         }
     },
@@ -44,10 +49,25 @@ var ListItem = React.createClass({
             .update(updateObj);
     },
 
+    handleSaveClick(){
+        this.fb2
+            .child(this.props.item.key)
+            .update({text:this.state.text});
+
+        this.setState({textChanged:false});
+    },
+
     handleTextChange(e){
         this.setState({
             text: e.target.value,
             textChanged: true
+        })
+    },
+
+    handleUndoClick(){
+        this.setState({
+            text:this.props.item.text,
+            textChanged: false
         })
     },
 
@@ -64,6 +84,7 @@ var ListItem = React.createClass({
 
                 <input  type="text"
                         className="form-control"
+                        disabled={this.state.done}
                         value={this.state.text}
                         onChange={this.handleTextChange}/>
 
